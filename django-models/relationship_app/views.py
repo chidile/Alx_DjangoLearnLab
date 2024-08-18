@@ -42,5 +42,5 @@ def login_view(request):
     return render(request, 'login.html')  
 
 # Logout View (using built-in LogoutView)  
-class CustomLogoutView(LogoutView):  
+class LogoutView(LogoutView):  
     template_name = 'logout.html' 
