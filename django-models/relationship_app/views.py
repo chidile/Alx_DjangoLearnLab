@@ -30,13 +30,13 @@ def register(request):
             return redirect('list_books')  # Redirect to a page after registration  
     else:  
         form = UserCreationForm()  
-    return render(request, 'register.html', {'form': form})  
+    return render(request, 'relationship_app/register.html', {'form': form})  
 
 # Login View  
 class CustomLoginView(LoginView):  
-    template_name = 'login.html'  # Specify your login template  
+    template_name = 'relationship_app/login.html'  # Specify your login template  
     success_url = reverse_lazy('list_books') 
 
 # Logout View (using built-in LogoutView)  
 class LogoutView(LogoutView):  
-    template_name = 'logout.html' 
+    template_name = 'relationship_app/logout.html' 
