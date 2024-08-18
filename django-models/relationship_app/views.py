@@ -7,6 +7,8 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm  
 from django.shortcuts import render, redirect  
 from django.contrib.auth.views import LogoutView 
+from django.contrib.auth.views import LoginView  
+from django.urls import reverse_lazy 
 
 def list_books(request):  
     books = Book.objects.all()  
@@ -31,15 +33,9 @@ def register(request):
     return render(request, 'register.html', {'form': form})  
 
 # Login View  
-def login_view(request):  
-    if request.method == 'POST':  
-        username = request.POST['username']  
-        password = request.POST['password']  
-        user = authenticate(request, username=username, password=password)  
-        if user is not None:  
-            login(request, user)  
-            return redirect('list_books')  # Redirect to a page after login  
-    return render(request, 'login.html')  
+class CustomLoginView(LoginView):  
+    template_name = 'login.html'  # Specify your login template  
+    success_url = reverse_lazy('list_books') 
 
 # Logout View (using built-in LogoutView)  
 class LogoutView(LogoutView):  
