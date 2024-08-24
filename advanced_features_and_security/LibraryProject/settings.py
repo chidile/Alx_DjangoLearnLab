@@ -126,6 +126,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
-AUTH_USER_MODEL = 'relationship_app.CustomUser'  # defining auth user model
+AUTH_USER_MODEL = 'relationship_app.CustomUser'  # set the AUTH_USER_MODEL to point to your new custom user model.
 MEDIA_URL = '/media/'  
 MEDIA_ROOT = BASE_DIR / 'media'
