@@ -151,3 +151,6 @@ CSRF_COOKIE_SECURE = True  # Ensure CSRF cookies are only sent over HTTPS
 X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking by denying framing  
 SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent MIME-sniffing  
 SECURE_BROWSER_XSS_FILTER = True  # Enable XSS filtering in browsers
+
+SECURE_PROXY_SSL_HEADER = True
+HTTP_X_FORWARDED_PROTO = True
