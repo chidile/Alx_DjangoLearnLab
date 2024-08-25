@@ -42,14 +42,11 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse  
 from django import forms  
 from .models import MyModel  # Assuming you have a model named MyModel  
-
-# Form for user input  
-class MyForm(forms.Form):  
-    user_input = forms.CharField(max_length=100)  
+from .forms import ExampleForm
 
 def secure_view(request):  
     if request.method == 'POST':  
-        form = MyForm(request.POST)  
+        form = ExampleForm(request.POST)  
         if form.is_valid():  
             # Safely handle user input  
             user_input = form.cleaned_data['user_input']  
@@ -57,7 +54,7 @@ def secure_view(request):
             MyModel.objects.create(name=user_input)  
             return redirect('success_view')  # Redirect after successful creation  
     else:  
-        form = MyForm()  
+        form = ExampleForm()  
     return render(request, 'secure_template.html', {'form': form})  
 
 def success_view(request):  
