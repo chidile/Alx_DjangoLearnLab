@@ -63,6 +63,17 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 from django.contrib.auth.models import AbstractUser, BaseUserManager  
 
+class MyModel(models.Model):  
+    name = models.CharField(max_length=100)  
+
+    class Meta:  
+        permissions = [  
+            ('can_view', 'Can view model'),  
+            ('can_create', 'Can create model'),  
+            ('can_edit', 'Can edit model'),  
+            ('can_delete', 'Can delete model'),  
+        ]
+
 class CustomUserManager(BaseUserManager):  
     def create_user(self, username, password=None, **extra_fields):  
         if not username:  
