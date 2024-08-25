@@ -5,8 +5,8 @@ from .models import   MyModel
 
 @permission_required('app_name.can_view', raise_exception=True)  
 def list_view(request):  
-    objects = MyModel.objects.all()  
-    return render(request, 'list.html', {'objects': objects})  
+    book_list = MyModel.objects.all()  
+    return render(request, 'list.html', {'book_list': book_list})  
 
 @permission_required('app_name.can_create', raise_exception=True)  
 def create_view(request):  
@@ -17,11 +17,11 @@ def create_view(request):
 
 @permission_required('app_name.can_edit', raise_exception=True)  
 def edit_view(request, pk):  
-    obj = get_object_or_404(MyModel, pk=pk)  
+    books = get_object_or_404(MyModel, pk=pk)  
     if request.method == 'POST':  
         # Logic to edit the MyModel instance  
         pass  
-    return render(request, 'edit.html', {'object': obj})  
+    return render(request, 'edit.html', {'books': books})  
 
 @permission_required('app_name.can_delete', raise_exception=True)  
 def delete_view(request, pk):  
