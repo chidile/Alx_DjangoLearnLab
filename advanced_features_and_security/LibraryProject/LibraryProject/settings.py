@@ -119,3 +119,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'bookshelf.CustomUser'  # set the AUTH_USER_MODEL to point to your new custom user model.
 MEDIA_URL = '/media/'  
 MEDIA_ROOT = BASE_DIR / 'media'
+
+SECURE_BROWSER_XSS_FILTER = True  
+X_FRAME_OPTIONS = 'DENY'  
+SECURE_CONTENT_TYPE_NOSNIFF = True  
+CSRF_COOKIE_SECURE = True  # Ensure cookies are sent over HTTPS  
+SESSION_COOKIE_SECURE = True  # Ensure session cookies are sent over HTTPS
