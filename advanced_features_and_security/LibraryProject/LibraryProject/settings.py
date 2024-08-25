@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure--9_a69zlgkso3)i)j68%bg=we@qc88j-c13ga55*zzdmqa@-8#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -39,6 +39,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'bookshelf.middleware.CSPHeaderMiddleware',
 ]
 
 ROOT_URLCONF = 'LibraryProject.urls'
@@ -120,8 +121,16 @@ AUTH_USER_MODEL = 'bookshelf.CustomUser'  # set the AUTH_USER_MODEL to point to 
 MEDIA_URL = '/media/'  
 MEDIA_ROOT = BASE_DIR / 'media'
 
+
+
+
+# Browser-side protections  
 SECURE_BROWSER_XSS_FILTER = True  
 X_FRAME_OPTIONS = 'DENY'  
 SECURE_CONTENT_TYPE_NOSNIFF = True  
-CSRF_COOKIE_SECURE = True  # Ensure cookies are sent over HTTPS  
-SESSION_COOKIE_SECURE = True  # Ensure session cookies are sent over HTTPS
+
+# Secure cookies  
+CSRF_COOKIE_SECURE = True  # Cookies are sent over HTTPS only  
+SESSION_COOKIE_SECURE = True  # Session cookies are sent over HTTPS only  
+
+# Additional security settings can be added here

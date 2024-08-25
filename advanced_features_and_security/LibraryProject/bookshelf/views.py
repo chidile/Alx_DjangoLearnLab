@@ -30,3 +30,35 @@ def delete_view(request, pk):
         obj.delete()  
         # Redirect after deletion  
     return render(request, 'delete.html', {'object': obj})
+
+
+
+
+
+
+
+
+from django.shortcuts import render, redirect  
+from django.http import HttpResponse  
+from django import forms  
+from .models import MyModel  # Assuming you have a model named MyModel  
+
+# Form for user input  
+class MyForm(forms.Form):  
+    user_input = forms.CharField(max_length=100)  
+
+def secure_view(request):  
+    if request.method == 'POST':  
+        form = MyForm(request.POST)  
+        if form.is_valid():  
+            # Safely handle user input  
+            user_input = form.cleaned_data['user_input']  
+            # Use Django ORM to interact with the database  
+            MyModel.objects.create(name=user_input)  
+            return redirect('success_view')  # Redirect after successful creation  
+    else:  
+        form = MyForm()  
+    return render(request, 'secure_template.html', {'form': form})  
+
+def success_view(request):  
+    return HttpResponse("Data submitted successfully!")
