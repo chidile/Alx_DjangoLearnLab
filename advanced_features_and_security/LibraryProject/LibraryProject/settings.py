@@ -133,4 +133,21 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 CSRF_COOKIE_SECURE = True  # Cookies are sent over HTTPS only  
 SESSION_COOKIE_SECURE = True  # Session cookies are sent over HTTPS only  
 
-# Additional security settings can be added here
+# settings.py  
+
+# Enable HTTPS redirection  
+SECURE_SSL_REDIRECT = True  # Redirect all non-HTTPS requests to HTTPS  
+
+# HTTP Strict Transport Security (HSTS) settings  
+SECURE_HSTS_SECONDS = 31536000  # Enforce HTTPS for one year  
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Include all subdomains in HSTS policy  
+SECURE_HSTS_PRELOAD = True  # Allow preloading of HSTS  
+
+# Secure cookie settings  
+SESSION_COOKIE_SECURE = True  # Ensure session cookies are only sent over HTTPS  
+CSRF_COOKIE_SECURE = True  # Ensure CSRF cookies are only sent over HTTPS  
+
+# Implement secure headers  
+X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking by denying framing  
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent MIME-sniffing  
+SECURE_BROWSER_XSS_FILTER = True  # Enable XSS filtering in browsers
