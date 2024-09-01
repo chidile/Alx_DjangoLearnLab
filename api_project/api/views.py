@@ -7,5 +7,10 @@ from .models import Book
 from .serializers import BookSerializer  
 
 class BookListCreate(generics.ListCreateAPIView):  
-    queryset = Book.objects.all()  
-    serializer_class = BookSerializer
+    queryset = Book.objects.all()  # Retrieve all Book instances
+    serializer_class = BookSerializer   # Use the BookSerializer for serialization 
+  
+
+class BookList(generics.ListAPIView):  
+    queryset = Book.objects.all()  # Retrieve all Book instances  
+    serializer_class = BookSerializer  # Use the BookSerializer for serialization
