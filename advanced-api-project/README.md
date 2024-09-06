@@ -14,7 +14,20 @@
 - Create, Update, and Delete views require authentication.
 
 
-# Example API requests  
-GET /books/?title=Example  # Filter by title  
-GET /books/?search=Example  # Search by title and author  
-GET /books/?ordering=title  # Order by title
+class BookListView(generics.ListAPIView):  
+    """  
+    API view to retrieve a list of books.  
+    
+    Filtering options:  
+    - Filter by title: ?title=<title>  
+    - Filter by author: ?author__name=<author_name>  
+    - Filter by publication year: ?publication_year=<year>  
+
+    Searching options:  
+    - Search by title and author name: ?search=<search_term>  
+
+    Ordering:  
+    - Order by title: ?ordering=title  
+    - Order by publication year: ?ordering=publication_year  
+    """  
+    ...
