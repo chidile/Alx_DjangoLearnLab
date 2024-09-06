@@ -7,7 +7,7 @@ from .models import Book, Author
 class BookAPITests(APITestCase):  
     def setUp(self):  
         # Create a sample author  
-        self.author = Author.objects.create(name="Sample Author")  
+        self.author = Author.objects.create(name="Sample Author") 
         # Sample book data  
         self.book_data = {  
             'title': 'Sample Book',  
@@ -48,6 +48,11 @@ class BookAPITests(APITestCase):
     def test_permission_required(self):  
         # Assuming you have a permission setup, test unauthorized access  
         response = self.client.get('/api/books/')  
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)  # Adjust based on your permission setup
+    
+    def test_login_required(self):  
+        # Assuming you have a permission setup, test unauthorized access  
+        response = self.client.login('/login/')  
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)  # Adjust based on your permission setup
 
 
