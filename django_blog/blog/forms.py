@@ -17,12 +17,10 @@ class PostForm(forms.ModelForm):
     class Meta:  
         model = Post  
         fields = ['title', 'content',  'tags']  
-    
-    def __init__(self, *args, **kwargs):  
-        super(PostForm, self).__init__(*args, **kwargs)  
-        self.fields['tags'].queryset = Tag.objects.all()  
 
 class CommentForm(forms.ModelForm):  
     class Meta:  
         model = Comment  
         fields = ['content'] 
+
+posts_with_tag = Post.objects.filter(tags__name__in=['tag_name']) 
