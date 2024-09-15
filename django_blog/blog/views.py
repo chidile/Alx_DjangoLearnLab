@@ -1,5 +1,3 @@
-# blog/views.py  
-
 from django.shortcuts import render, redirect  
 from django.contrib.auth import authenticate, login, logout  
 from django.contrib.auth.decorators import login_required  
@@ -7,7 +5,9 @@ from .forms import RegistrationForm,PostForm, CommentForm
 from django.views import generic  
 from django.urls import reverse_lazy  
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin   
-from .models import Post, Comment
+from .models import Post, Comment, Tag
+from django.db.models import Q  
+
 
 def register(request):  
     if request.method == 'POST':  
@@ -128,3 +128,18 @@ class CommentDeleteView(LoginRequiredMixin, generic.DeleteView):
 
     def get_success_url(self):  
         return self.object.post.get_absolute_url() 
+    
+
+
+def search_posts(request):  
+    query = request.GET.get('q')  
+    if query:  
+        posts = Post.objects.filter(  
+            Q(title__icontains=query) |   
+            Q(content__icontains=query) |   
+            Q(tags__name__icontains=query)  
+        ).distinct()  
+    else:  
+        posts = Post.objects.none()  
+    
+    return render(request, 'blog/search_results.html', {'posts': posts, 'query': query})  
