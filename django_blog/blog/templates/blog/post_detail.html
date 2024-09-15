@@ -11,6 +11,31 @@
     <p>{{ post.content }}</p>  
     <a href="{% url 'post_edit' post.pk %}">Edit</a>  
     <a href="{% url 'post_delete' post.pk %}">Delete</a>  
-    <a href="{% url 'post_list' %}">Back to Posts</a>  
+    <a href="{% url 'post_list' %}">Back to Posts</a>
+
+ 
+
+    <h2>Comments</h2>  
+
+    <ul>  
+        {% for comment in post.comments.all %}  
+            <li>  
+                <strong>{{ comment.author }}</strong>: {{ comment.content }}  
+                <a href="{% url 'comment_edit' comment.pk %}">Edit</a>  
+                <form action="{% url 'comment_delete' comment.pk %}" method="post" style="display:inline;">  
+                    {% csrf_token %}  
+                    <button type="submit">Delete</button>  
+                </form>  
+            </li>  
+        {% endfor %}  
+    </ul>  
+
+    
+    <h3>Add a Comment</h3>  
+    <form method="post" action="{% url 'comment_create' post.pk %}">  
+        {% csrf_token %}  
+        {{ form.as_p }}  
+        <button type="submit">Submit</button>  
+</form>
 </body>  
 </html>

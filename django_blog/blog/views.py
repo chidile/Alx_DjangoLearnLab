@@ -3,11 +3,11 @@
 from django.shortcuts import render, redirect  
 from django.contrib.auth import authenticate, login, logout  
 from django.contrib.auth.decorators import login_required  
-from .forms import RegistrationForm,PostForm 
+from .forms import RegistrationForm,PostForm, CommentForm
 from django.views import generic  
 from django.urls import reverse_lazy  
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin   
-from .models import Post  
+from .models import Post, Comment
 
 def register(request):  
     if request.method == 'POST':  
@@ -77,7 +77,7 @@ class PostCreateView(LoginRequiredMixin, generic.CreateView):
         form.instance.author = self.request.user  
         return super().form_valid(form)  
 
-class PostUpdateView(IsAuthorMixin, LoginRequiredMixin, generic.UpdateView):  
+class PostUpdateView( LoginRequiredMixin, generic.UpdateView):  
     model = Post  
     form_class = PostForm  
     template_name = 'blog/post_form.html'  
@@ -86,10 +86,45 @@ class PostUpdateView(IsAuthorMixin, LoginRequiredMixin, generic.UpdateView):
     def get_queryset(self):  
         return Post.objects.filter(author=self.request.user)  
 
-class PostDeleteView(LoginRequiredMixin, generic.DeleteView):  
+class PostDeleteView(IsAuthorMixin, LoginRequiredMixin, generic.DeleteView):  
     model = Post  
     template_name = 'blog/post_confirm_delete.html'  
     success_url = reverse_lazy('post_list')  
 
     def get_queryset(self):  
-        return Post.objects.filter(author=self.request.user)
+        return Post.objects.filter(author=self.request.user)   
+
+class CommentListView(generic.ListView):  
+    model = Comment  
+    template_name = 'blog/comment_list.html'  
+    
+    def get_queryset(self):  
+        return Comment.objects.filter(post=self.kwargs['pk'])  
+
+class CommentCreateView(LoginRequiredMixin, generic.CreateView):  
+    model = Comment  
+    form_class = CommentForm  
+    template_name = 'blog/comment_form.html'  
+
+    def form_valid(self, form):  
+        form.instance.post_id = self.kwargs['post_id']  
+        form.instance.author = self.request.user  
+        return super().form_valid(form)  
+
+class CommentUpdateView(LoginRequiredMixin, generic.UpdateView):  
+    model = Comment  
+    form_class = CommentForm  
+    template_name = 'blog/comment_form.html'  
+
+    def get_queryset(self):  
+        return Comment.objects.filter(author=self.request.user)  
+
+class CommentDeleteView(LoginRequiredMixin, generic.DeleteView):  
+    model = Comment  
+    template_name = 'blog/comment_confirm_delete.html'  
+
+    def get_queryset(self):  
+        return Comment.objects.filter(author=self.request.user)  
+
+    def get_success_url(self):  
+        return self.object.post.get_absolute_url() 
