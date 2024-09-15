@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm  
 from django.contrib.auth.models import User  
 from .models import Post, Comment
-from taggit.forms import TagField 
+from taggit.forms import TagField, TagWidget
 
 class RegistrationForm(UserCreationForm):  
     email = forms.EmailField(required=True)  
@@ -15,7 +15,7 @@ class RegistrationForm(UserCreationForm):
 
 
 class PostForm(forms.ModelForm): 
-    tags = TagField(widget=forms.TextInput(attrs={'placeholder': 'Add tags'}))  # Using TextInput for tags
+    tags = TagField(widget=TagWidget(attrs={'placeholder': 'Add tags, separated by commas'}))  # Use TagWidget
 
     class Meta:  
         model = Post  
