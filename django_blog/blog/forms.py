@@ -15,7 +15,7 @@ class RegistrationForm(UserCreationForm):
 
 
 class PostForm(forms.ModelForm): 
-    tags = TagField(widget=TagWidget(attrs={'placeholder': 'Add tags, separated by commas'}))  # Use TagWidget
+    tags = TagField(widgets=TagWidget(attrs={'placeholder': 'Add tags, separated by commas'}))  # Use TagWidget
 
     class Meta:  
         model = Post  
