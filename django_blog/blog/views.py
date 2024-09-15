@@ -3,12 +3,11 @@
 from django.shortcuts import render, redirect  
 from django.contrib.auth import authenticate, login, logout  
 from django.contrib.auth.decorators import login_required  
-from .forms import RegistrationForm  
+from .forms import RegistrationForm,PostForm 
 from django.views import generic  
 from django.urls import reverse_lazy  
-from django.contrib.auth.mixins import LoginRequiredMixin  
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin   
 from .models import Post  
-from .forms import PostForm 
 
 def register(request):  
     if request.method == 'POST':  
@@ -55,13 +54,16 @@ def edit_profile(request):
     return render(request, 'blog/edit_profile.html', {'form': form})
  
 
- 
+class IsAuthorMixin(UserPassesTestMixin):  
+    def test_func(self):  
+        post = self.get_object()  
+        return self.request.user == post.author   
 
 class PostListView(generic.ListView):  
     model = Post  
     template_name = 'blog/post_list.html'  
 
-class PostDetailView(generic.DetailView):  
+class PostDetailView(IsAuthorMixin, generic.DetailView):  
     model = Post  
     template_name = 'blog/post_detail.html'  
 
@@ -75,7 +77,7 @@ class PostCreateView(LoginRequiredMixin, generic.CreateView):
         form.instance.author = self.request.user  
         return super().form_valid(form)  
 
-class PostUpdateView(LoginRequiredMixin, generic.UpdateView):  
+class PostUpdateView(IsAuthorMixin, LoginRequiredMixin, generic.UpdateView):  
     model = Post  
     form_class = PostForm  
     template_name = 'blog/post_form.html'  
