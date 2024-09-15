@@ -1,0 +1,25 @@
+<!-- templates/blog/post_list.html -->  
+
+<!DOCTYPE html>  
+<html>  
+<head>  
+    <title>Blog Posts</title>  
+</head>  
+<body>  
+    <h1>Blog Posts</h1>  
+    <a href="{% url 'post_create' %}">Create New Post</a>  
+    <ul>  
+        {% for post in posts %}  
+            <li>  
+                <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a>  
+                <p>{{ post.content|truncatewords:30 }}</p>  
+                <a href="{% url 'post_edit' post.pk %}">Edit</a>  
+                <form action="{% url 'post_delete' post.pk %}" method="post" style="display:inline;">  
+                    {% csrf_token %}  
+                    <button type="submit">Delete</button>  
+                </form>  
+            </li>  
+        {% endfor %}  
+    </ul>  
+</body>  
+</html>
