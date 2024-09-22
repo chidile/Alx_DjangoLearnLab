@@ -23,7 +23,7 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
 
 
-class UserViewSet(viewsets.ModelViewSet):  
+class UserViewSet(generics.GenericAPIView):  
     queryset = CustomUser.objects.all()  
     serializer_class = UserSerializer  
     permission_classes = [permissions.IsAuthenticated]  
