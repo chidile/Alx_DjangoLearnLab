@@ -1,7 +1,11 @@
 
 from rest_framework import viewsets, permissions, generics
-from .models import Post, Comment  
-from .serializers import PostSerializer, CommentSerializer  
+from .models import Post, Comment, Post, Like 
+from .serializers import PostSerializer, CommentSerializer 
+from notifications.models import Notification  
+from django.shortcuts import get_object_or_404   
+from rest_framework.response import Response
+from notifications.models import Notification  
 
 
 class PostViewSet(viewsets.ModelViewSet):  
@@ -54,3 +58,23 @@ class FeedView(generics.ListAPIView):
         user = self.request.user  
         following_users = user.following.all()  
         return Post.objects.filter(author__in=following_users).order_by('-created_at')  
+    
+
+class LikePostView(generics.CreateAPIView):  
+    permission_classes = [permissions.IsAuthenticated]  
+
+    def post(self, request, pk):  
+        post = Post.objects.get(pk=pk)  
+        if Like.objects.filter(post=post, user=request.user).exists():  
+            return Response({'error': 'You have already liked this post.'}, status=400)  
+        Like.objects.create(post=post, user=request.user)  
+        Notification.objects.create(recipient=post.author, actor=request.user, verb='liked', target=post)  
+        return Response({'status': 'liked'}, status=200)  
+
+class UnlikePostView(generics.DestroyAPIView):  
+    permission_classes = [permissions.IsAuthenticated]  
+
+    def delete(self, request, pk):  
+        post = Post.objects.get(pk=pk)  
+        Like.objects.filter(post=post, user=request.user).delete()  
+        return Response({'status': 'unliked'}, status=200)
