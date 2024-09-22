@@ -5,6 +5,6 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),  
     path('login/', LoginView.as_view(), name='login'),  
     path('profile/<str:username>/', UserProfileView.as_view(), name='profile'),
-    path('follow/<int:pk>/', UserViewSet.as_view({'post': 'follow_user'}), name='follow_user'),  
-    path('unfollow/<int:pk>/', UserViewSet.as_view({'post': 'unfollow_user'}), name='unfollow_user'),   
+    path('follow/<int:user_id>/', UserViewSet.as_view({'post': 'follow_user'}), name='follow_user'),  
+    path('unfollow/<int:user_id>/', UserViewSet.as_view({'post': 'unfollow_user'}), name='unfollow_user'),   
 ]
