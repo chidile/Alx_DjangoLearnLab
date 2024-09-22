@@ -20,7 +20,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         name = serializers.CharField()  
 
     # Create a new user  
-    user = get_user_model.objects.create_user()  
+    user = get_user_model().objects.create_user()  
     user.save() 
 
     def create(self, validated_data):  
