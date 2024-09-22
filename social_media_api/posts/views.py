@@ -1,5 +1,5 @@
 
-from rest_framework import viewsets, permissions, generics
+from rest_framework import viewsets, permissions, generics,status
 from .models import Post, Comment, Post, Like 
 from .serializers import PostSerializer, CommentSerializer 
 from notifications.models import Notification  
@@ -60,21 +60,35 @@ class FeedView(generics.ListAPIView):
         return Post.objects.filter(author__in=following_users).order_by('-created_at')  
     
 
+
 class LikePostView(generics.CreateAPIView):  
     permission_classes = [permissions.IsAuthenticated]  
 
     def post(self, request, pk):  
-        post = Post.objects.get(pk=pk)  
-        if Like.objects.filter(post=post, user=request.user).exists():  
-            return Response({'error': 'You have already liked this post.'}, status=400)  
-        Like.objects.create(post=post, user=request.user)  
-        Notification.objects.create(recipient=post.author, actor=request.user, verb='liked', target=post)  
-        return Response({'status': 'liked'}, status=200)  
+        post = get_object_or_404(Post, pk=pk)  
+        like, created = Like.objects.get_or_create(post=post, user=request.user)  
+
+        if not created:  
+            return Response({'error': 'You have already liked this post.'}, status=status.HTTP_400_BAD_REQUEST)  
+
+        # Create a notification  
+        Notification.objects.create(  
+            recipient=post.author,  
+            actor=request.user,  
+            verb='liked your post',  
+            target_content_type=ContentType.objects.get_for_model(Post),  
+            target_object_id=post.id,  
+        )  
+        return Response({'status': 'liked'}, status=status.HTTP_201_CREATED)  
 
 class UnlikePostView(generics.DestroyAPIView):  
     permission_classes = [permissions.IsAuthenticated]  
 
     def delete(self, request, pk):  
-        post = Post.objects.get(pk=pk)  
-        Like.objects.filter(post=post, user=request.user).delete()  
-        return Response({'status': 'unliked'}, status=200)
+        post = get_object_or_404(Post, pk=pk)  
+        try:  
+            like = Like.objects.get(post=post, user=request.user)  
+            like.delete()  
+            return Response({'status': 'unliked'}, status=status.HTTP_204_NO_CONTENT)  
+        except Like.DoesNotExist:  
+            return Response({'error': 'You have not liked this post.'}, status=status.HTTP_400_BAD_REQUEST)
