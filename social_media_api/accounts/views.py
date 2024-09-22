@@ -23,7 +23,6 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
 
 
-
 class UserViewSet(viewsets.ModelViewSet):  
     queryset = CustomUser.objects.all()  
     serializer_class = UserSerializer  
@@ -31,10 +30,10 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def follow_user(self, request, pk=None):  
         user_to_follow = self.get_object(pk)  
-        request.user.followers.add(user_to_follow)  
+        request.user.following.add(user_to_follow)  
         return Response({'status': 'following'}, status=status.HTTP_200_OK)  
 
     def unfollow_user(self, request, pk=None):  
         user_to_unfollow = self.get_object(pk)  
-        request.user.follower.remove(user_to_unfollow)  
+        request.user.following.remove(user_to_unfollow)  
         return Response({'status': 'unfollowed'}, status=status.HTTP_200_OK)
